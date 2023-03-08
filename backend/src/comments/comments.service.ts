@@ -1,26 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import * as svgCaptcha from 'svg-captcha';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Comment } from 'db/entities/comment.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CommentsService {
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  constructor(
+    @InjectRepository(Comment)
+    private commentRepository: Repository<Comment>,
+  ) {}
+
+  async create(createCommentDto: CreateCommentDto) {
+    const comment = this.commentRepository.create(createCommentDto);
+
+    return await this.commentRepository.save(comment);
   }
 
-  findAll() {
-    return `This action returns all comments`;
+  async findAll() {
+    return this.commentRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOne(id: number) {
+    const comment = await this.commentRepository.findOneBy({
+      id: id,
+    });
+
+    if (!comment) {
+      throw new NotFoundException(`Bank with ID ${id} not found`);
+    }
+
+    return comment;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async update(id: number, updateCommentDto: UpdateCommentDto) {
+    await this.commentRepository.update(id, updateCommentDto);
+
+    return await this.commentRepository.findOneBy({ id: id });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: number) {
+    const result = await this.commentRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Bank with ID ${id} not found`);
+    }
+  }
+
+  generateCaptcha() {
+    return svgCaptcha.create();
   }
 }
