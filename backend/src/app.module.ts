@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'db/entities/user.entity';
-import { UsersModule } from './users/users.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -12,11 +11,11 @@ import { UsersModule } from './users/users.module';
       username: 'postgres',
       password: 'root',
       database: 'comments',
-      entities: [User],
+      entities: [],
       synchronize: true,
       autoLoadEntities: true,
     }),
-    UsersModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [],
