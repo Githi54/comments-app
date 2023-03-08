@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Comment } from 'db/entities/comment.entity';
 import { CommentsModule } from './comments/comments.module';
 
 @Module({
@@ -11,7 +12,7 @@ import { CommentsModule } from './comments/comments.module';
       username: 'postgres',
       password: 'root',
       database: 'comments',
-      entities: [],
+      entities: [Comment],
       synchronize: true,
       autoLoadEntities: true,
     }),
