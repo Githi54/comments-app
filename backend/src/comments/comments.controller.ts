@@ -37,6 +37,14 @@ export class CommentsController {
     return this.commentsService.findAll();
   }
 
+  @Get('captcha')
+  getCaptcha(@Req() req: Request, @Res() res: Response) {
+    const captcha = this.commentsService.generateCaptcha();
+
+    req.session.captchaText = captcha.text;
+    res.type('svg').send(captcha.data);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.commentsService.findOne(+id);
@@ -50,13 +58,5 @@ export class CommentsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.commentsService.remove(+id);
-  }
-
-  @Get('captcha')
-  getCaptcha(@Req() req: Request, @Res() res: Response) {
-    const captcha = this.commentsService.generateCaptcha();
-
-    req.session.captchaText = captcha.text;
-    res.type('svg').send(captcha.data);
   }
 }
