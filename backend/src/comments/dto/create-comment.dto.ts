@@ -4,4 +4,5 @@ export class CreateCommentDto {
   readonly email: string;
   readonly homePage?: string;
   readonly text: string;
+  attachmentUrl: string;
 }
