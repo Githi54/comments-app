@@ -8,6 +8,9 @@ export class Comment {
   @Column()
   userName: string;
 
+  @Column({ nullable: false, default: 'none' })
+  userAvatar: string;
+
   @Column()
   email: string;
 
@@ -16,4 +19,7 @@ export class Comment {
 
   @Column()
   text: string;
+
+  @Column({ nullable: true })
+  attachmentUrl?: string;
 }
