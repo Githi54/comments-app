@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
+import { join } from 'path';
 
 declare module 'express' {
   interface Request {
@@ -20,6 +21,8 @@ async function bootstrap() {
       saveUninitialized: false,
     }),
   );
+
+  app.useStaticAssets(join(__dirname, '..', 'public'));
 
   await app.listen(PORT, () => console.log(`App start in PORT ${PORT}`));
 }

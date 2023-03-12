@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { Comment } from 'db/entities/comment.entity';
 import { CommentsModule } from './comments/comments.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import path from 'path';
+import path, { join } from 'path';
 
 @Module({
   imports: [
@@ -19,6 +20,10 @@ import path from 'path';
           return cb(null, `${randomName}${path.extname(file.originalname)}`);
         },
       }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/public',
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
