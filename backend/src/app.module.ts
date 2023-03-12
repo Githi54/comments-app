@@ -21,10 +21,6 @@ import path, { join } from 'path';
         },
       }),
     }),
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-      serveRoot: '/public',
-    }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

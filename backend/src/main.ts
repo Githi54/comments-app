@@ -22,8 +22,6 @@ async function bootstrap() {
     }),
   );
 
-  app.useStaticAssets(join(__dirname, '..', 'public'));
-
   await app.listen(PORT, () => console.log(`App start in PORT ${PORT}`));
 }
 
