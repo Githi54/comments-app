@@ -1,11 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ServeStaticModule } from '@nestjs/serve-static';
 import { Comment } from 'db/entities/comment.entity';
 import { CommentsModule } from './comments/comments.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import path, { join } from 'path';
+import path from 'path';
 
 @Module({
   imports: [

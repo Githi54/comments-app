@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
-import { join } from 'path';
 
 declare module 'express' {
   interface Request {
