@@ -16,6 +16,13 @@ function App() {
   }, []);
 
   console.log(comments);
+
+  return (
+    <>
+      <h1>Hello world!</h1>
+      {comments.length > 0 && <p>{comments[0].userName}</p>}
+    </>
+  );
 }
 
 export default App;

@@ -1,6 +1,6 @@
 export interface IComment {
   id: number;
-  username: string;
+  userName: string;
   userAvatar: string;
   email: string;
   homePage?: string;
