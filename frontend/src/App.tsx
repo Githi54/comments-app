@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllComments } from "./api/comments.api";
+import { CommentsList } from "./components/CommentsList";
 import { Loader } from "./components/Loader";
 import { IComment } from "./types/comment.type";
 
@@ -19,10 +20,7 @@ function App() {
   return (
     <>
       {comments.length > 0 ? (
-        <>
-          <h1>Hello world!</h1>
-          <p>{comments[0].userName}</p>
-        </>
+        <CommentsList comments={comments} />
       ) : (
         <Loader />
       )}

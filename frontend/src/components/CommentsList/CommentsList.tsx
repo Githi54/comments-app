@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core"
 import { IComment } from "../../types/comment.type";
 import { CommentItem } from "../CommentItem";
 
@@ -10,12 +11,12 @@ export const CommentsList: React.FC<Props> = ({ comments }) => {
   const answers = comments.filter((comment) => comment.isAnswer);
 
   return (
-    <>
+    <Box sx={{display: "flex", flexDirection: "column"}}>
       {mainComments.map((comment) => (
         <div key={comment.id}>
           <CommentItem comment={comment} answers={answers} />
         </div>
       ))}
-    </>
+    </Box>
   );
 };
