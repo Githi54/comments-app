@@ -11,15 +11,21 @@ export class Comment {
   @Column({ nullable: false, default: 'none' })
   userAvatar: string;
 
-  @Column()
+  @Column({ nullable: false })
   email: string;
 
   @Column({ nullable: true })
   homePage?: string;
 
-  @Column()
+  @Column({ nullable: false })
   text: string;
 
   @Column({ nullable: true })
   attachmentUrl?: string;
+
+  @Column({ nullable: false, default: false })
+  isAnswer: boolean;
+
+  @Column({ nullable: true })
+  answeredToCommentId?: number;
 }

@@ -6,4 +6,6 @@ export class CommentSchema {
   homePage?: string;
   text: string;
   attachmentUrl?: string;
+  isAnswer: boolean;
+  answeredToCommentId?: number;
 }

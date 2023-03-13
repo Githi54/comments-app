@@ -6,4 +6,6 @@ export interface IComment {
   homePage?: string;
   text: string;
   attachmentUrl?: string;
+  isAnswer: boolean;
+  answeredToCommentId?: number;
 }
