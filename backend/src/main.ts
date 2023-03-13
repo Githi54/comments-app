@@ -11,7 +11,9 @@ declare module 'express' {
 
 async function bootstrap() {
   const PORT = process.env.PORT || 3000;
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    cors: true,
+  });
 
   app.use(
     session({
