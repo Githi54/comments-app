@@ -6,11 +6,14 @@ type Props = {
 };
 
 export const CommentsList: React.FC<Props> = ({ comments }) => {
+  const mainComments = comments.filter((comment) => !comment.isAnswer);
+  const answers = comments.filter((comment) => comment.isAnswer);
+
   return (
     <>
-      {comments.map((comment) => (
+      {mainComments.map((comment) => (
         <div key={comment.id}>
-          <CommentItem comment={comment} />
+          <CommentItem comment={comment} answers={answers} />
         </div>
       ))}
     </>
