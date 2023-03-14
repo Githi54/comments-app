@@ -1,3 +1,4 @@
+import { Box } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import { getAllComments } from "./api/comments.api";
 import { CommentsList } from "./components/CommentsList";
@@ -5,7 +6,7 @@ import { Loader } from "./components/Loader";
 import { IComment } from "./types/comment.type";
 
 function App() {
-  const [comments, setComments] = useState<IComment[]>([]);
+  const [comments, setComments] = useState<IComment[] | null>(null);
 
   useEffect(() => {
     const getComments = async () => {
@@ -18,13 +19,13 @@ function App() {
   }, []);
 
   return (
-    <>
-      {comments.length > 0 ? (
+    <Box sx={{display: "flex", alignItems: "center"}}>
+      {Array.isArray(comments) ? (
         <CommentsList comments={comments} />
       ) : (
         <Loader />
       )}
-    </>
+    </Box>
   );
 }
 
