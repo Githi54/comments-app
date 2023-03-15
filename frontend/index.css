@@ -14,3 +14,9 @@
         min-width: 300px;
     }
 }
+
+@media (max-width: 300px) {
+    .root {
+        min-width: 200px;
+    }
+}

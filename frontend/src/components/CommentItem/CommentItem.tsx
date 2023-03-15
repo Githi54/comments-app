@@ -63,11 +63,11 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
         }}
       >
         {answersForComment.length > 0 ? (
-          <Button style={{ fontSize: "12px" }}>Show answers</Button>
+          <Button style={{ fontSize: "12px" }}>All answers</Button>
         ) : (
           <div></div>
         )}
-        <Button style={{ fontSize: "12px" }}>Add answer</Button>
+        <Button style={{ fontSize: "12px" }}>Answer</Button>
       </Box>
     </Box>
   );
