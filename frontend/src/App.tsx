@@ -19,7 +19,7 @@ function App() {
   }, []);
 
   return (
-    <Box sx={{display: "flex", alignItems: "center"}}>
+    <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto"}}>
       {Array.isArray(comments) ? (
         <CommentsList comments={comments} />
       ) : (

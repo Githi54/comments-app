@@ -11,7 +11,7 @@ export const CommentsList: React.FC<Props> = ({ comments }) => {
   const answers = comments.filter((comment) => comment.isAnswer);
 
   return (
-    <Box sx={{display: "flex", flexDirection: "column"}}>
+    <Box style={{display: "flex", flexDirection: "column", gap: "10px"}}>
       {mainComments.map((comment) => (
         <div key={comment.id}>
           <CommentItem comment={comment} answers={answers} />

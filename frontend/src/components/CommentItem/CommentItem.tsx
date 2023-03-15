@@ -1,4 +1,4 @@
-import { Avatar, Box, Typography } from "@material-ui/core";
+import { Avatar, Box, Button, Typography } from "@material-ui/core";
 import { IComment } from "../../types/comment.type";
 
 type Props = {
@@ -26,7 +26,14 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
 
   return (
     <Box
-      style={{ display: "flex", flexDirection: "column", maxWidth: "500px" }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "500px",
+        gap: "15px",
+        border: "1px solid gray",
+        borderRadius: "5px"
+      }}
     >
       <Box
         style={{
@@ -35,17 +42,32 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
           alignItems: "center",
           backgroundColor: "lightgrey",
           padding: "10px",
-          gap: "10px"
+          gap: "10px",
         }}
       >
         <Avatar
           src={`avatars/${userAvatar}.png`}
-          style={{ backgroundColor: "gray"}}
+          style={{ backgroundColor: "gray" }}
         />
-        <Typography style={{fontWeight: "bold"}}>{userName}</Typography>
+        <Typography style={{ fontWeight: "bold" }}>{userName}</Typography>
       </Box>
       <Box>
-        <Typography style={{padding: "5px"}}>{text}</Typography>
+        <Typography style={{ padding: "5px" }}>{text}</Typography>
+      </Box>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          paddingRight: "20px",
+          paddingLeft: "20px",
+        }}
+      >
+        {answersForComment.length > 0 ? (
+          <Button style={{ fontSize: "12px" }}>Show answers</Button>
+        ) : (
+          <div></div>
+        )}
+        <Button style={{ fontSize: "12px" }}>Add answer</Button>
       </Box>
     </Box>
   );
