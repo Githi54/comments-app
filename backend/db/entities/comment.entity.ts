@@ -1,4 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'Comment' })
 export class Comment {
@@ -28,4 +33,7 @@ export class Comment {
 
   @Column({ nullable: true })
   answeredToCommentId?: number;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 }

@@ -8,4 +8,5 @@ export class CommentSchema {
   attachmentUrl?: string;
   isAnswer: boolean;
   answeredToCommentId?: number;
+  createdAt: Date;
 }

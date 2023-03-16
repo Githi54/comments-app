@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Typography } from "@material-ui/core";
+import { Avatar, Box, Button, Link, Typography } from "@material-ui/core";
 import { IComment } from "../../types/comment.type";
 
 type Props = {
@@ -17,10 +17,33 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
     attachmentUrl,
     isAnswer,
     answeredToCommentId,
+    createdAt,
   } = comment;
   const answersForComment = answers.filter(
     (answer) => answer.answeredToCommentId === id
   );
+
+  interface DateObj {
+    data?: string;
+    time?: string;
+  }
+
+  const normalizeDate = (date: string): DateObj => {
+    const data =
+      date.substring(8, 10) +
+      "." +
+      date.substring(5, 7) +
+      "." +
+      date.substring(0, 4);
+    const time = date.substring(11, 16);
+
+    return { data, time };
+  };
+
+  const { data, time } = (createdAt && normalizeDate(createdAt)) || {
+    data: null,
+    time: null,
+  };
 
   console.log(answersForComment);
 
@@ -32,7 +55,7 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
         maxWidth: "500px",
         gap: "15px",
         border: "1px solid gray",
-        borderRadius: "5px"
+        borderRadius: "5px",
       }}
     >
       <Box
@@ -49,7 +72,12 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
           src={`avatars/${userAvatar}.png`}
           style={{ backgroundColor: "gray" }}
         />
-        <Typography style={{ fontWeight: "bold" }}>{userName}</Typography>
+        <Typography style={{ fontWeight: "bold" }}>
+          {homePage ? <Link href={`${homePage}`}>{userName}</Link> : userName}
+        </Typography>
+        <Typography
+          style={{ fontSize: "12px" }}
+        >{`${data} at ${time}`}</Typography>
       </Box>
       <Box>
         <Typography style={{ padding: "5px" }}>{text}</Typography>

@@ -13,15 +13,17 @@ function App() {
     const getComments = async () => {
       const allComments = await getAllComments();
 
+      console.log(allComments);
+
       setComments(allComments);
     };
-
+    
     getComments();
   }, []);
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto"}}>
-      <AddForm openForm={true} handleCloseForm={() => null} handleSubmit={() => null} isAnswer={false} />
+      {/* <AddForm openForm={true} handleCloseForm={() => null} handleSubmit={() => null} isAnswer={false} /> */}
       {Array.isArray(comments) ? (
         <CommentsList comments={comments} />
       ) : (
