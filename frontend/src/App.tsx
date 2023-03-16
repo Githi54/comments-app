@@ -21,7 +21,7 @@ function App() {
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto"}}>
-      <AddForm openForm={true} handleCloseForm={() => null} handleSubmit={() => null} />
+      <AddForm openForm={true} handleCloseForm={() => null} handleSubmit={() => null} isAnswer={false} />
       {Array.isArray(comments) ? (
         <CommentsList comments={comments} />
       ) : (
