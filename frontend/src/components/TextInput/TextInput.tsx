@@ -1,15 +1,15 @@
-import { useCallback } from "react";
+import { ChangeEvent, useCallback } from "react";
 import { IconButton, Paper, Tooltip } from "@material-ui/core";
 import { Link as LinkIcon, Attachment as AttachmentIcon, FormatBold as BoldIcon, FormatItalic as ItalicIcon } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     alignItems: "center",
     padding: theme.spacing(1),
     height: "100px",
-    border: "1px solid"
+    border: "1px solid gray",
   },
   input: {
     flexGrow: 1,
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme) => ({
     minHeight: "80px",
     border: "none",
     outline: "none",
-    fontFamily: "Roboto, Helvetica, Arial, sans-serif",
-    fontSize: "1rem"
+    fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
+    fontSize: "1rem",
   },
   iconButton: {
     padding: 8,
@@ -30,15 +30,15 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
     commentText: string;
-    setCommetText: (arg: string) => void;
+    setCommentText: (arg: string) => void;
 }
 
-export const TextInput: React.FC<Props> = ({ commentText, setCommetText}) => {
+export const TextInput: React.FC<Props> = ({ commentText, setCommentText}) => {
     const classes = useStyles();
   
-    const handleInputChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setCommetText(event.target.value);
-    }, [commentText]);
+    const handleInputChange = useCallback((event: ChangeEvent<HTMLTextAreaElement>) => {
+      setCommentText(event.target.value);
+    }, []);
   
     // const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     //   const fileList = event.target.files;
@@ -50,12 +50,12 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommetText}) => {
     // };
   
     const handleBoldClick = useCallback(() => {
-      setCommetText(`<b>${commentText}</b>`);
-    }, [commentText]);
+      setCommentText(`<b>${commentText}</b>`);
+    }, []);
   
     const handleItalicClick = useCallback(() => {
-        setCommetText(`<i>${commentText}</i>`);
-      }, [commentText]);
+        setCommentText(`<i>${commentText}</i>`);
+      }, []);
   
     return (
       <Paper component="div" className={classes.root}>
@@ -64,6 +64,7 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommetText}) => {
           placeholder="Type comment"
           value={commentText}
           onChange={handleInputChange}
+          required
         />
         <Tooltip title="Attach a file">
           <IconButton component="label" className={classes.iconButton}>

@@ -11,11 +11,21 @@ export const getAllComments = async () => {
   }
 };
 
-export const postComment = async (comment: IComment) => {
+export const postComment = async (comment: IComment, captcha: string) => {
   try {
   const response = await axios.post("http://localhost:3000/comments", comment);
 
-  return response.data;
+  return response.status;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const getCaptcha = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/comments/captcha", { responseType: 'blob' })
+
+    return response.data;
   } catch (error) {
     throw error;
   }

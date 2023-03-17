@@ -45,7 +45,7 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
     time: null,
   };
 
-  console.log(answersForComment);
+  // console.log(answersForComment);
 
   return (
     <Box
@@ -73,7 +73,7 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
           style={{ backgroundColor: "gray" }}
         />
         <Typography style={{ fontWeight: "bold" }}>
-          {homePage ? <Link href={`${homePage}`}>{userName}</Link> : userName}
+          {homePage ? <Link href={`${homePage}`} target="_blank">{userName}</Link> : userName}
         </Typography>
         <Typography
           style={{ fontSize: "12px" }}

@@ -3,10 +3,10 @@ export interface IComment {
   userName: string;
   userAvatar: string;
   email: string;
-  homePage?: string;
+  homePage: string | null;
   text: string;
   attachmentUrl?: string;
   isAnswer: boolean;
-  answeredToCommentId?: number;
+  answeredToCommentId: number | null;
   createdAt?: string;
 }
