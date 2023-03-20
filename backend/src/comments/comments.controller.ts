@@ -6,14 +6,13 @@ import {
   Patch,
   Param,
   Delete,
-  Req,
   Res,
   HttpException,
   HttpStatus,
   UploadedFile,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -28,29 +27,11 @@ export interface MulterFile {
   filename?: string;
 }
 
+let captchaText: string;
+
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
-
-  @Post()
-  create(
-    @Body() createCommentDto: CreateCommentDto,
-    @Req() req: Request,
-    @UploadedFile() file: MulterFile,
-  ) {
-    const captcha = req.body.captcha;
-    const captchaText = req.session.captchaText;
-
-    if (captcha !== captchaText) {
-      throw new HttpException('Invalid captcha', HttpStatus.BAD_REQUEST);
-    }
-
-    if (file) {
-      createCommentDto.attachmentUrl = `${process.env.HOSTNAME}/uploads/${file.filename}`;
-    }
-
-    return this.commentsService.create(createCommentDto);
-  }
 
   @Get()
   findAll() {
@@ -58,11 +39,33 @@ export class CommentsController {
   }
 
   @Get('captcha')
-  getCaptcha(@Req() req: Request, @Res() res: Response) {
+  getCaptcha(@Res() res: Response) {
     const captcha = this.commentsService.generateCaptcha();
 
-    req.session.captchaText = captcha.text;
+    captchaText = captcha.text;
+
     res.type('svg').send(captcha.data);
+  }
+
+  @Post()
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+    @UploadedFile() file: MulterFile,
+  ) {
+    const captcha = createCommentDto.captcha;
+
+    if (captcha !== captchaText) {
+      throw new HttpException(
+        `Invalid captcha. Should be equal ${captchaText}, but input ${captcha}`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (file) {
+      createCommentDto.attachmentUrl = `${process.env.HOSTNAME}/uploads/${file.filename}`;
+    }
+
+    return this.commentsService.create(createCommentDto);
   }
 
   @Get(':id')

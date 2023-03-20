@@ -47,7 +47,6 @@ export const AddForm: React.FC<Props> = ({
       const response = await getCaptcha();
       const imgURL = URL.createObjectURL(response);
       setCaptchaURL(imgURL);
-      console.log(imgURL);
     } catch (error) {
       throw error;
     }
@@ -83,19 +82,21 @@ export const AddForm: React.FC<Props> = ({
       isAnswer,
       answeredToCommentId: answeredToCommentId || null,
       homePage: homePage.trim().length > 0 ? homePage : null,
+      captcha: captchaText,
     };
 
-    const result = await postComment(comment, captchaText);
-
-    result === 200 || result === 201
-      ? setButtonText("Success")
-      : setButtonText("Error");
+    await postComment(comment)
+      .then(() => setButtonText("Success"))
+      .catch(error => {setButtonText("Error"),
+        console.log(error);
+  });
 
     setAvatar("none");
     setCommentText("");
     setEmail("");
     setUserName("");
     setHomePage("");
+    setCapthcaText("");
     setIsLoad(false);
   };
 
@@ -173,9 +174,8 @@ export const AddForm: React.FC<Props> = ({
               />
             </Box>
             <Box style={{ display: "flex", flexDirection: "column" }}>
-              <Box sizeHeight={"50px"} sizeWidth={"50px"}>
+              <Box style={{height: "50px", width: "50px"}}>
                 <img src={captchaURL} alt="Captcha" />
-                
               </Box>
               <FormControl>
                 <InputLabel htmlFor="captcha" required>

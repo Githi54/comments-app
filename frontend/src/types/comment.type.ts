@@ -9,4 +9,5 @@ export interface IComment {
   isAnswer: boolean;
   answeredToCommentId: number | null;
   createdAt?: string;
+  captcha: string;
 }

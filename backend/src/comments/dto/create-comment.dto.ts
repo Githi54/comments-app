@@ -5,4 +5,5 @@ export class CreateCommentDto {
   readonly homePage?: string;
   readonly text: string;
   attachmentUrl: string;
+  readonly captcha: string;
 }
