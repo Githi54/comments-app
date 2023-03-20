@@ -74,6 +74,8 @@ export const AddForm: React.FC<Props> = ({
   ) => {
     event.preventDefault();
 
+    setIsLoad(true);
+
     const comment: IComment = {
       userName,
       userAvatar: avatar,
@@ -86,10 +88,14 @@ export const AddForm: React.FC<Props> = ({
     };
 
     await postComment(comment)
-      .then(() => setButtonText("Success"))
-      .catch(error => {setButtonText("Error"),
-        console.log(error);
-  });
+      .then(() => {
+        setButtonText("Success");
+        setIsLoad(false);
+      })
+      .catch((error) => {
+        setButtonText("Error");
+        setIsLoad(false);
+      });
 
     setAvatar("none");
     setCommentText("");
@@ -97,11 +103,14 @@ export const AddForm: React.FC<Props> = ({
     setUserName("");
     setHomePage("");
     setCapthcaText("");
-    setIsLoad(false);
   };
 
   return (
-    <Modal open={openForm} onClose={handleCloseForm}>
+    <Modal
+      open={openForm}
+      onClose={handleCloseForm}
+      style={{ maxHeight: "100%", overflow: "auto" }}
+    >
       <Box
         style={{
           backgroundColor: "white",
@@ -174,7 +183,7 @@ export const AddForm: React.FC<Props> = ({
               />
             </Box>
             <Box style={{ display: "flex", flexDirection: "column" }}>
-              <Box style={{height: "50px", width: "50px"}}>
+              <Box style={{ height: "50px", width: "50px" }}>
                 <img src={captchaURL} alt="Captcha" />
               </Box>
               <FormControl>
