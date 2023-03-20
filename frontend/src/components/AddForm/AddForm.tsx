@@ -109,7 +109,7 @@ export const AddForm: React.FC<Props> = ({
     <Modal
       open={openForm}
       onClose={handleCloseForm}
-      style={{ maxHeight: "100%", overflow: "auto" }}
+      style={{ maxHeight: "100%", overflow: "auto"}}
     >
       <Box
         style={{

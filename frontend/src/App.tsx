@@ -1,4 +1,4 @@
-import { Box } from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import { useCallback, useEffect, useState } from "react";
 import { getAllComments } from "./api/comments.api";
 import { AddForm } from "./components/AddForm";
@@ -8,9 +8,10 @@ import { IComment } from "./types/comment.type";
 
 function App() {
   const [comments, setComments] = useState<IComment[] | null>(null);
-  const [openForm, setOpenForm] = useState(true);
+  const [openForm, setOpenForm] = useState(false);
 
-  const handleClose = useCallback(() => setOpenForm(false), [])
+  const handleCloseForm = useCallback(() => setOpenForm(false), []);
+  const handleOpenForm = useCallback(() => setOpenForm(true), []);
 
   useEffect(() => {
     const getComments = async () => {
@@ -18,15 +19,34 @@ function App() {
 
       setComments(allComments);
     };
-    
+
     getComments();
   }, [comments]);
 
   return (
-    <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto"}}>
-      <AddForm openForm={openForm} handleCloseForm={handleClose} isAnswer={false} />
+    <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto" }}>
+      <AddForm
+        openForm={openForm}
+        handleCloseForm={handleCloseForm}
+        isAnswer={false}
+      />
       {Array.isArray(comments) ? (
-        <CommentsList comments={comments} />
+        <Box style={{display: "flex", flexDirection: "column", gap: "20px"}}>
+          <Box>
+            <Button
+              onClick={handleOpenForm}
+              style={{
+                backgroundColor: "lightgray",
+                float: "right",
+                textTransform: "capitalize"
+              }}
+              variant="outlined"
+            >
+              Add comment
+            </Button>
+          </Box>
+          <CommentsList comments={comments} />
+        </Box>
       ) : (
         <Loader />
       )}
