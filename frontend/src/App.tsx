@@ -9,17 +9,18 @@ import { IComment } from "./types/comment.type";
 function App() {
   const [comments, setComments] = useState<IComment[] | null>(null);
   const [openForm, setOpenForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const handleOpenForm = useCallback(() => setOpenForm(true), []);
 
   useEffect(() => {
     const getComments = async () => {
-      const allComments = await getAllComments();
+      const allComments = await getAllComments(currentPage);
 
-      setComments(allComments);
+      setComments(allComments.items);
     };
 
     getComments();
-  }, [comments]);
+  }, [comments, currentPage]);
 
   return (
     <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto" }}>

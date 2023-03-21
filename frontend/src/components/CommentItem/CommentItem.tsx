@@ -80,7 +80,7 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
         >{`${data} at ${time}`}</Typography>
       </Box>
       <Box>
-        <Typography style={{ padding: "5px" }}>{text}</Typography>
+        <Typography style={{ padding: "5px" }} dangerouslySetInnerHTML={{__html: text}} />
       </Box>
       <Box
         style={{

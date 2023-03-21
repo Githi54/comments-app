@@ -20,7 +20,7 @@ export class CommentsService {
   }
 
   async findAll(page: number) {
-    const limit = 25;
+    const limit = 2;
     const [comments, total] = await this.commentRepository.findAndCount({
       skip: limit * (page - 1),
       take: limit,
@@ -29,6 +29,7 @@ export class CommentsService {
     return {
       items: comments,
       totalPages: Math.ceil(total / limit),
+      limit,
     };
   }
 

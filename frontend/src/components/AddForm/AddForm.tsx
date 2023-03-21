@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+
 import {
   Avatar,
   Box,
@@ -28,12 +29,14 @@ type Props = {
   openForm: boolean;
   setOpenForm: Dispatch<SetStateAction<boolean>>;
   isAnswer: boolean;
+  answeredToCommentId?: number;
 };
 
 export const AddForm: React.FC<Props> = ({
   openForm,
   setOpenForm,
   isAnswer,
+  answeredToCommentId,
 }) => {
   const [captchaURL, setCaptchaURL] = useState("");
   const [captchaText, setCapthcaText] = useState("");
@@ -80,44 +83,40 @@ export const AddForm: React.FC<Props> = ({
     []
   );
 
-  const handleSubmit = useCallback(
-    async (
-      event: FormEvent<HTMLFormElement>,
-      isAnswer: boolean,
-      answeredToCommentId?: number
-    ) => {
-      event.preventDefault();
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>,
+    isAnswer: boolean
+  ) => {
+    event.preventDefault();
 
-      setIsLoad(true);
+    setIsLoad(true);
 
-      const comment: IComment = {
-        userName,
-        userAvatar: avatar,
-        email,
-        text: commentText,
-        isAnswer,
-        answeredToCommentId: answeredToCommentId || null,
-        homePage: homePage.trim().length > 0 ? homePage : null,
-        captcha: captchaText,
-      };
+    const comment: IComment = {
+      userName,
+      userAvatar: avatar,
+      email,
+      text: commentText,
+      isAnswer,
+      answeredToCommentId: answeredToCommentId ? answeredToCommentId : null,
+      homePage: homePage.trim().length > 0 ? homePage : null,
+      captcha: captchaText,
+    };
 
-      await postComment(comment)
-        .then(() => {
-          setButtonText("Success");
-          resetFormData();
-        })
-        .catch(() => {
-          setButtonText("Error");
-          setIsLoad(false);
-        });
-    },
-    []
-  );
+    await postComment(comment)
+      .then(() => {
+        setButtonText("Success");
+        resetFormData();
+      })
+      .catch(() => {
+        setButtonText("Error");
+        setIsLoad(false);
+      });
+  };
 
   const handleClose = () => {
     setOpenForm(false);
     resetFormData();
-  }
+  };
 
   const resetFormData = () => {
     setIsLoad(false);
@@ -128,7 +127,7 @@ export const AddForm: React.FC<Props> = ({
     setHomePage("");
     setCapthcaText("");
     setIsVisible(false);
-  }
+  };
 
   return (
     <Modal
@@ -168,7 +167,11 @@ export const AddForm: React.FC<Props> = ({
           >
             <Avatar
               src={`avatars/${avatar}.png`}
-              style={{ width: "100px", height: "100px", backgroundColor: "lightgray" }}
+              style={{
+                width: "100px",
+                height: "100px",
+                backgroundColor: "lightgray",
+              }}
             />
             <Box style={{ maxWidth: "max-content" }}>
               <Button variant="outlined" size="small" onClick={handleClick}>
@@ -184,26 +187,26 @@ export const AddForm: React.FC<Props> = ({
                   />
                 </Button>
                 <Button onClick={() => handleChangeAvatar("man")}>
-                <Avatar
-                  src={`avatars/man.png`}
-                  style={{
-                    cursor: "pointer",
-                    backgroundColor: "lightgray",
-                    width: "40px",
-                    height: "40px",
-                  }}
-                />
+                  <Avatar
+                    src={`avatars/man.png`}
+                    style={{
+                      cursor: "pointer",
+                      backgroundColor: "lightgray",
+                      width: "40px",
+                      height: "40px",
+                    }}
+                  />
                 </Button>
                 <Button onClick={() => handleChangeAvatar("woman")}>
-                <Avatar
-                  src={`avatars/woman.png`}
-                  style={{
-                    cursor: "pointer",
-                    width: "40px",
-                    height: "40px",
-                    backgroundColor: "lightgray",
-                  }}
-                />
+                  <Avatar
+                    src={`avatars/woman.png`}
+                    style={{
+                      cursor: "pointer",
+                      width: "40px",
+                      height: "40px",
+                      backgroundColor: "lightgray",
+                    }}
+                  />
                 </Button>
               </Box>
             )}

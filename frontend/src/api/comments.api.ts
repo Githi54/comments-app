@@ -1,9 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { IComment } from "../types/comment.type";
+import { GetResponse } from "../types/getResponse.type";
 
-export const getAllComments = async () => {
+export const getAllComments = async (page = 1) => {
   try {
-    const response: AxiosResponse<IComment[]> = await axios.get("http://localhost:3000/comments");
+    const response: AxiosResponse<GetResponse> = await axios.get(`http://localhost:3000/comments?page=${page}`);
 
     return response.data;
   } catch (error) {
