@@ -10,6 +10,7 @@ import {
   HttpException,
   HttpStatus,
   UploadedFile,
+  Query,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { Response } from 'express';
@@ -34,8 +35,8 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Get()
-  findAll() {
-    return this.commentsService.findAll();
+  findAll(@Query('page') page = 1) {
+    return this.commentsService.findAll(page);
   }
 
   @Get('captcha')

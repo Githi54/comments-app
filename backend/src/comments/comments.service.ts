@@ -19,8 +19,17 @@ export class CommentsService {
     return await this.commentRepository.save(comment);
   }
 
-  async findAll() {
-    return this.commentRepository.find();
+  async findAll(page: number) {
+    const limit = 25;
+    const [comments, total] = await this.commentRepository.findAndCount({
+      skip: limit * (page - 1),
+      take: limit,
+    });
+
+    return {
+      items: comments,
+      totalPages: Math.ceil(total / limit),
+    };
   }
 
   async findOne(id: number) {
@@ -45,7 +54,7 @@ export class CommentsService {
     const result = await this.commentRepository.delete(id);
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Bank with ID ${id} not found`);
+      throw new NotFoundException(`Comment with ID ${id} not found`);
     }
   }
 
