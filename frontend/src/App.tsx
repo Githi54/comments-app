@@ -9,8 +9,6 @@ import { IComment } from "./types/comment.type";
 function App() {
   const [comments, setComments] = useState<IComment[] | null>(null);
   const [openForm, setOpenForm] = useState(false);
-
-  const handleCloseForm = useCallback(() => setOpenForm(false), []);
   const handleOpenForm = useCallback(() => setOpenForm(true), []);
 
   useEffect(() => {
@@ -27,7 +25,7 @@ function App() {
     <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto" }}>
       <AddForm
         openForm={openForm}
-        handleCloseForm={handleCloseForm}
+        setOpenForm={setOpenForm}
         isAnswer={false}
       />
       {Array.isArray(comments) ? (

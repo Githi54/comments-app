@@ -1,11 +1,14 @@
 import React, {
   ChangeEvent,
+  Dispatch,
   FormEvent,
+  SetStateAction,
   useCallback,
   useEffect,
   useState,
 } from "react";
 import {
+  Avatar,
   Box,
   Button,
   CircularProgress,
@@ -23,13 +26,13 @@ import { getCaptcha, postComment } from "../../api/comments.api";
 
 type Props = {
   openForm: boolean;
-  handleCloseForm: () => void;
+  setOpenForm: Dispatch<SetStateAction<boolean>>;
   isAnswer: boolean;
 };
 
 export const AddForm: React.FC<Props> = ({
   openForm,
-  handleCloseForm,
+  setOpenForm,
   isAnswer,
 }) => {
   const [captchaURL, setCaptchaURL] = useState("");
@@ -41,8 +44,18 @@ export const AddForm: React.FC<Props> = ({
   const [homePage, setHomePage] = useState("");
   const [isLoad, setIsLoad] = useState(false);
   const [buttonText, setButtonText] = useState("Submit");
+  const [isVisible, setIsVisible] = useState(false);
 
-  const fetchCaptcha = async () => {
+  const handleClick = useCallback(() => {
+    setIsVisible(!isVisible);
+  }, [isVisible]);
+
+  const handleChangeAvatar = useCallback((avatarName: string) => {
+    setAvatar(avatarName);
+    setIsVisible(false);
+  }, []);
+
+  const fetchCaptcha = useCallback(async () => {
     try {
       const response = await getCaptcha();
       const imgURL = URL.createObjectURL(response);
@@ -50,7 +63,7 @@ export const AddForm: React.FC<Props> = ({
     } catch (error) {
       throw error;
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchCaptcha();
@@ -67,62 +80,74 @@ export const AddForm: React.FC<Props> = ({
     []
   );
 
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>,
-    isAnswer: boolean,
-    answeredToCommentId?: number
-  ) => {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (
+      event: FormEvent<HTMLFormElement>,
+      isAnswer: boolean,
+      answeredToCommentId?: number
+    ) => {
+      event.preventDefault();
 
-    setIsLoad(true);
+      setIsLoad(true);
 
-    const comment: IComment = {
-      userName,
-      userAvatar: avatar,
-      email,
-      text: commentText,
-      isAnswer,
-      answeredToCommentId: answeredToCommentId || null,
-      homePage: homePage.trim().length > 0 ? homePage : null,
-      captcha: captchaText,
-    };
+      const comment: IComment = {
+        userName,
+        userAvatar: avatar,
+        email,
+        text: commentText,
+        isAnswer,
+        answeredToCommentId: answeredToCommentId || null,
+        homePage: homePage.trim().length > 0 ? homePage : null,
+        captcha: captchaText,
+      };
 
-    await postComment(comment)
-      .then(() => {
-        setButtonText("Success");
-        setIsLoad(false);
-      })
-      .catch((error) => {
-        setButtonText("Error");
-        setIsLoad(false);
-      });
+      await postComment(comment)
+        .then(() => {
+          setButtonText("Success");
+          resetFormData();
+        })
+        .catch(() => {
+          setButtonText("Error");
+          setIsLoad(false);
+        });
+    },
+    []
+  );
 
+  const handleClose = () => {
+    setOpenForm(false);
+    resetFormData();
+  }
+
+  const resetFormData = () => {
+    setIsLoad(false);
     setAvatar("none");
     setCommentText("");
     setEmail("");
     setUserName("");
     setHomePage("");
     setCapthcaText("");
-  };
+    setIsVisible(false);
+  }
 
   return (
     <Modal
       open={openForm}
-      onClose={handleCloseForm}
-      style={{ maxHeight: "100%", overflow: "auto"}}
+      onClose={setOpenForm}
+      style={{ maxHeight: "100%", overflow: "auto" }}
     >
       <Box
         style={{
           backgroundColor: "white",
           maxWidth: "600px",
           margin: "30px auto",
-          padding: "5px 20px 20px",
-          borderRadius: "20px",
+          padding: "5px 40px 40px",
+          borderRadius: "40px",
         }}
       >
         <IconButton
           aria-label="close"
-          onClick={handleCloseForm}
+          onClick={handleClose}
           style={{
             float: "right",
             verticalAlign: "top",
@@ -133,11 +158,62 @@ export const AddForm: React.FC<Props> = ({
         <form onSubmit={(event) => handleSubmit(event, isAnswer)}>
           <Box
             style={{
+              paddingTop: "25px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: "10px",
+              alignItems: "center",
+            }}
+          >
+            <Avatar
+              src={`avatars/${avatar}.png`}
+              style={{ width: "100px", height: "100px", backgroundColor: "lightgray" }}
+            />
+            <Box style={{ maxWidth: "max-content" }}>
+              <Button variant="outlined" size="small" onClick={handleClick}>
+                Change avatar
+              </Button>
+            </Box>
+            {isVisible && (
+              <Box style={{ display: "flex", gap: "10px" }}>
+                <Button onClick={() => handleChangeAvatar("none")}>
+                  <Avatar
+                    src={`avatars/none.png`}
+                    style={{ cursor: "pointer", width: "40px", height: "40px" }}
+                  />
+                </Button>
+                <Button onClick={() => handleChangeAvatar("man")}>
+                <Avatar
+                  src={`avatars/man.png`}
+                  style={{
+                    cursor: "pointer",
+                    backgroundColor: "lightgray",
+                    width: "40px",
+                    height: "40px",
+                  }}
+                />
+                </Button>
+                <Button onClick={() => handleChangeAvatar("woman")}>
+                <Avatar
+                  src={`avatars/woman.png`}
+                  style={{
+                    cursor: "pointer",
+                    width: "40px",
+                    height: "40px",
+                    backgroundColor: "lightgray",
+                  }}
+                />
+                </Button>
+              </Box>
+            )}
+          </Box>
+          <Box
+            style={{
               display: "flex",
               flexDirection: "column",
               maxWidth: "500px",
               gap: "10px",
-              marginTop: "25px",
             }}
           >
             <FormControl>
@@ -171,6 +247,7 @@ export const AddForm: React.FC<Props> = ({
               <Input
                 id="homePage"
                 aria-describedby="my-helper-text"
+                type="url"
                 value={homePage}
                 onChange={(event) => handleChangeInput(event, setHomePage)}
               />
