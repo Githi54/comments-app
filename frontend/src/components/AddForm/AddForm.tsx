@@ -111,6 +111,8 @@ export const AddForm: React.FC<Props> = ({
         setButtonText("Error");
         setIsLoad(false);
       });
+
+    fetchCaptcha();
   };
 
   const handleClose = () => {
@@ -263,9 +265,6 @@ export const AddForm: React.FC<Props> = ({
               />
             </Box>
             <Box style={{ display: "flex", flexDirection: "column" }}>
-              <Box style={{ height: "50px", width: "50px" }}>
-                <img src={captchaURL} alt="Captcha" />
-              </Box>
               <FormControl>
                 <InputLabel htmlFor="captcha" required>
                   Captcha
@@ -275,11 +274,29 @@ export const AddForm: React.FC<Props> = ({
                   aria-describedby="my-helper-text"
                   value={captchaText}
                   onChange={(event) => handleChangeInput(event, setCapthcaText)}
+                  required
                 />
                 <FormHelperText id="my-helper-text">
                   Enter the text from the captcha
                 </FormHelperText>
               </FormControl>
+              <Box
+                style={{
+                  height: "60px",
+                  width: "148px",
+                  border: "1px solid lightblue",
+                }}
+              >
+                <img
+                  src={captchaURL}
+                  alt="Captcha"
+                  style={{
+                    height: "60px",
+                    width: "148px",
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
             </Box>
             <Box>
               <Button
