@@ -14,7 +14,7 @@ export class Comment {
   userName: string;
 
   @Column({ nullable: false, default: 'none' })
-  userAvatar: string;
+  userAvatar: 'none' | 'man' | 'woman';
 
   @Column({ nullable: false })
   email: string;

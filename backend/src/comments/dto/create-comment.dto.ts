@@ -1,6 +1,6 @@
 export class CreateCommentDto {
   readonly userName: string;
-  readonly userAvatar: string;
+  readonly userAvatar: 'none' | 'man' | 'woman';
   readonly email: string;
   readonly homePage?: string;
   readonly text: string;
