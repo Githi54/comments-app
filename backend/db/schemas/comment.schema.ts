@@ -1,7 +1,7 @@
 export class CommentSchema {
   id: number;
   username: string;
-  userAvatar: string;
+  userAvatar: 'none' | 'man' | 'woman';
   email: string;
   homePage?: string;
   text: string;

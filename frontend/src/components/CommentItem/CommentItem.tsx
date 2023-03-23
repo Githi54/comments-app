@@ -8,21 +8,12 @@ type Props = {
 
 export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
   const {
-    id,
     text,
     userName,
     userAvatar,
-    email,
     homePage,
-    attachmentUrl,
-    isAnswer,
-    answeredToCommentId,
     createdAt,
   } = comment;
-  const answersForComment = answers.filter(
-    (answer) => answer.answeredToCommentId === id
-  );
-
   interface DateObj {
     data?: string;
     time?: string;
@@ -44,8 +35,6 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
     data: null,
     time: null,
   };
-
-  // console.log(answersForComment);
 
   return (
     <Box
@@ -90,12 +79,6 @@ export const CommentItem: React.FC<Props> = ({ comment, answers }) => {
           paddingLeft: "20px",
         }}
       >
-        {answersForComment.length > 0 ? (
-          <Button style={{ fontSize: "12px" }}>All answers</Button>
-        ) : (
-          <div></div>
-        )}
-        <Button style={{ fontSize: "12px" }}>Answer</Button>
       </Box>
     </Box>
   );

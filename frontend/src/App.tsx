@@ -16,7 +16,7 @@ function App() {
   const handleOpenForm = useCallback(() => setOpenForm(true), []);
 
   const handleChangePage = useCallback(
-    (event: ChangeEvent<any>, page: number) => {
+    (_: ChangeEvent<any>, page: number) => {
       setCurrentPage(page);
     },
     []
@@ -57,7 +57,7 @@ function App() {
                 count={totalPages}
                 onChange={handleChangePage}
                 style={{
-                  position: "fixed",
+                  position: "relative",
                   bottom: 0,
                 }}
               />

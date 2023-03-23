@@ -18,9 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "create-migration": "typeorm migration:create ./db/migrations/PostRefactoring"
+    "create-migration": "typeorm migration:create ./db/migrations/PostRefactoring",
+    "seed": "ts-node -r tsconfig-paths/register src/seed.ts"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@nestjs/common": "^9.3.9",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.0.0",
@@ -35,7 +37,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "svg-captcha": "^1.4.0",
-    "typeorm": "^0.3.12"
+    "typeorm": "^0.3.12",
+    "typeorm-seeding": "^1.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
