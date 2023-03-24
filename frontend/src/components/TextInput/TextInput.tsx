@@ -47,21 +47,33 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
     []
   );
 
-  const handleBoldClick = useCallback(() => {
-    if (commentText.includes("<b>") || commentText.includes("</b>")) {
-      return;
-    }
+  const handleChangeText = useCallback(
+    (tag: string) => {
+      const selectedText = window.getSelection();
 
-    setCommentText(`<b>${commentText}</b>`);
-  }, [commentText]);
+      if (`${selectedText}`.includes(`<${tag}>`)) {
+        return;
+      }
 
-  const handleItalicClick = useCallback(() => {
-    if (commentText.includes("<i>") || commentText.includes("</i>")) {
-      return;
-    }
+      if (`${selectedText}`.length > 0) {
+        setCommentText(
+          commentText.replace(
+            `${selectedText}`,
+            `<${tag}>${selectedText}</${tag}>`
+          )
+        );
 
-    setCommentText(`<i>${commentText}</i>`);
-  }, [commentText]);
+        return;
+      }
+
+      if (commentText.includes(`<${tag}>${commentText}</${tag}>`)) {
+        return;
+      }
+
+      setCommentText(`<${tag}>${commentText}</${tag}>`);
+    },
+    [commentText]
+  );
 
   return (
     <Paper component="div" className={classes.root}>
@@ -71,7 +83,6 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
         value={commentText}
         onChange={handleInputChange}
         required
-        contentEditable={true}
       />
       <Tooltip title="Insert a link">
         <IconButton className={classes.iconButton}>
@@ -79,12 +90,18 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
         </IconButton>
       </Tooltip>
       <Tooltip title="Bold text">
-        <IconButton className={classes.iconButton} onClick={handleBoldClick}>
+        <IconButton
+          className={classes.iconButton}
+          onClick={() => handleChangeText("b")}
+        >
           <BoldIcon />
         </IconButton>
       </Tooltip>
       <Tooltip title="Italicize text">
-        <IconButton className={classes.iconButton} onClick={handleItalicClick}>
+        <IconButton
+          className={classes.iconButton}
+          onClick={() => handleChangeText("i")}
+        >
           <ItalicIcon />
         </IconButton>
       </Tooltip>
