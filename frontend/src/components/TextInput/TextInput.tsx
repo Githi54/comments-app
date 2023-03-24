@@ -1,9 +1,10 @@
-import { ChangeEvent, useCallback } from "react";
-import { IconButton, Paper, Tooltip } from "@material-ui/core";
+import { ChangeEvent, useCallback, useState } from "react";
+import { Box, IconButton, Input, Paper, Tooltip } from "@material-ui/core";
 import {
   Link as LinkIcon,
   FormatBold as BoldIcon,
   FormatItalic as ItalicIcon,
+  Check as CheckIcon,
 } from "@mui/icons-material";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -39,15 +40,17 @@ type Props = {
 
 export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
   const classes = useStyles();
+  const [isViewLinkInput, setIsViewLinkInput] = useState(true);
+  const [link, setLink] = useState("");
 
   const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement>) => {
-      setCommentText(event.target.value);
+    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, setState: (arg: string) => void) => {
+      setState(event.target.value);
     },
     []
   );
 
-  const handleChangeText = useCallback(
+  const handleClickText = useCallback(
     (tag: string) => {
       const selectedText = window.getSelection();
 
@@ -76,35 +79,55 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
   );
 
   return (
-    <Paper component="div" className={classes.root}>
-      <textarea
-        className={classes.input}
-        placeholder="Type comment"
-        value={commentText}
-        onChange={handleInputChange}
-        required
-      />
-      <Tooltip title="Insert a link">
-        <IconButton className={classes.iconButton}>
-          <LinkIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Bold text">
-        <IconButton
-          className={classes.iconButton}
-          onClick={() => handleChangeText("b")}
-        >
-          <BoldIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Italicize text">
-        <IconButton
-          className={classes.iconButton}
-          onClick={() => handleChangeText("i")}
-        >
-          <ItalicIcon />
-        </IconButton>
-      </Tooltip>
-    </Paper>
+    <Box style={{ position: "relative" }}>
+      {isViewLinkInput && (
+        <Box style={{ position: "absolute", bottom: 15, left: 5 }}>
+          <Box style={{display: "flex", position: "relative", border: "2px solid lightblue"}}>
+            <Input
+              style={{
+                display: "block",
+                maxWidth: "200px",
+              }}
+              onChange={event => handleInputChange(event, setLink)}
+            />
+            <Tooltip title="Insert a link" style={{position: "absolute", right: 0}}>
+              <IconButton size="small">
+                <CheckIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+      )}
+      <Paper component="div" className={classes.root}>
+        <textarea
+          className={classes.input}
+          placeholder="Type comment"
+          value={commentText}
+          onChange={event => handleInputChange(event, setCommentText)}
+          required
+        />
+        <Tooltip title="Insert a link">
+          <IconButton className={classes.iconButton}>
+            <LinkIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Bold text">
+          <IconButton
+            className={classes.iconButton}
+            onClick={() => handleClickText("b")}
+          >
+            <BoldIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Italicize text">
+          <IconButton
+            className={classes.iconButton}
+            onClick={() => handleClickText("i")}
+          >
+            <ItalicIcon />
+          </IconButton>
+        </Tooltip>
+      </Paper>
+    </Box>
   );
 };
