@@ -40,7 +40,7 @@ type Props = {
 
 export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
   const classes = useStyles();
-  const [isViewLinkInput, setIsViewLinkInput] = useState(true);
+  const [isViewLinkInput, setIsViewLinkInput] = useState(false);
   const [link, setLink] = useState("");
 
   const handleInputChange = useCallback(
@@ -78,6 +78,27 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
     [commentText]
   );
 
+  const handleAddedLink = useCallback(() => {
+    const selectedText = window.getSelection();
+
+      if (`${selectedText}`.length > 0) {
+        setCommentText(
+          commentText.replace(
+            `${selectedText}`,
+            `<a href=${link}>${selectedText}</a>`
+          )
+        );
+
+        return;
+      }
+
+      setCommentText(`<a href=${link}>${commentText}</a>`);
+  }, [commentText, link]);
+
+  const handleLinkView = useCallback(() => {
+    setIsViewLinkInput(!isViewLinkInput);
+  }, [isViewLinkInput])
+
   return (
     <Box style={{ position: "relative" }}>
       {isViewLinkInput && (
@@ -87,11 +108,13 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
               style={{
                 display: "block",
                 maxWidth: "200px",
+                backgroundColor: "white",
               }}
+              type="url"
               onChange={event => handleInputChange(event, setLink)}
             />
             <Tooltip title="Insert a link" style={{position: "absolute", right: 0}}>
-              <IconButton size="small">
+              <IconButton size="small" onClick={handleAddedLink}>
                 <CheckIcon />
               </IconButton>
             </Tooltip>
@@ -107,7 +130,7 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
           required
         />
         <Tooltip title="Insert a link">
-          <IconButton className={classes.iconButton}>
+          <IconButton className={classes.iconButton} onClick={handleLinkView}>
             <LinkIcon />
           </IconButton>
         </Tooltip>
