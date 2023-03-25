@@ -1,5 +1,5 @@
 import { Box } from "@material-ui/core"
-import { IComment } from "../../types/comment.type";
+import { IComment } from "../../types/types/comment.type";
 import { CommentItem } from "../CommentItem";
 
 type Props = {

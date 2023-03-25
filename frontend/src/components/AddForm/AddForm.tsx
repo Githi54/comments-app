@@ -22,7 +22,7 @@ import {
 } from "@material-ui/core";
 import CloseIcon from "@mui/icons-material/Close";
 import { TextInput } from "../TextInput";
-import { IComment } from "../../types/comment.type";
+import { IComment } from "../../types/types/comment.type";
 import { getCaptcha, postComment } from "../../api/comments.api";
 
 type Props = {

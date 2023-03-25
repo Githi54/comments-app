@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Link, Typography } from "@material-ui/core";
-import { IComment } from "../../types/comment.type";
+import { IComment } from "../../types/types/comment.type";
 
 type Props = {
   comment: IComment;

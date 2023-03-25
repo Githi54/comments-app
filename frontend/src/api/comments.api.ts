@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
-import { IComment } from "../types/comment.type";
-import { GetResponse } from "../types/getResponse.type";
+import { IComment } from "../types/types/comment.type";
+import { GetResponse } from "../types/types/getResponse.type";
 
 export const getAllComments = async (page = 1) => {
   try {
