@@ -19,11 +19,18 @@ import {
   Input,
   InputLabel,
   Modal,
+  Typography,
 } from "@material-ui/core";
 import CloseIcon from "@mui/icons-material/Close";
 import { TextInput } from "../TextInput";
 import { IComment } from "../../types/types/comment.type";
 import { getCaptcha, postComment } from "../../api/comments.api";
+import {
+  hasAllTagsClosed,
+  isCorrectUserName,
+  isValidTag,
+} from "../../helpers/validation";
+import { ErrorMessage } from "../../types/enums/errorMessage.enum";
 
 type Props = {
   openForm: boolean;
@@ -48,6 +55,8 @@ export const AddForm: React.FC<Props> = ({
   const [isLoad, setIsLoad] = useState(false);
   const [buttonText, setButtonText] = useState("Submit");
   const [isVisible, setIsVisible] = useState(false);
+  const [isError, setIsError] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClick = useCallback(() => {
     setIsVisible(!isVisible);
@@ -79,6 +88,7 @@ export const AddForm: React.FC<Props> = ({
     ) => {
       setState(event.target.value.trim());
       setButtonText("Submit");
+      setErrorMessage("");
     },
     []
   );
@@ -130,6 +140,36 @@ export const AddForm: React.FC<Props> = ({
     setCapthcaText("");
     setIsVisible(false);
   };
+
+  useEffect(() => {
+    if (
+      !isCorrectUserName(userName) ||
+      !isValidTag(commentText) ||
+      !hasAllTagsClosed(commentText)
+    ) {
+      setIsError(true);
+      return;
+    }
+
+    if (!isCorrectUserName(userName) && userName.trim().length > 0) {
+      setErrorMessage(ErrorMessage.UserName);
+      return;
+    }
+
+    if (!isValidTag(commentText)) {
+      setErrorMessage(ErrorMessage.NotValidTag);
+      return;
+    }
+
+    if (
+      isCorrectUserName(userName) &&
+      isValidTag(commentText) &&
+      hasAllTagsClosed(commentText)
+    ) {
+      setIsError(false);
+      setErrorMessage("");
+    }
+  }, [userName, commentText]);
 
   return (
     <Modal
@@ -230,9 +270,16 @@ export const AddForm: React.FC<Props> = ({
                 aria-describedby="my-helper-text"
                 value={userName}
                 onChange={(event) => handleChangeInput(event, setUserName)}
+                error={isError && errorMessage === ErrorMessage.UserName}
               />
               <FormHelperText id="my-helper-text">
-                Must contain only Latin letters and numbers
+                {errorMessage === ErrorMessage.UserName ? (
+                  <Typography style={{ color: "red" }}>
+                    {errorMessage}
+                  </Typography>
+                ) : (
+                  "Must contain only Latin letters and numbers"
+                )}
               </FormHelperText>
             </FormControl>
             <FormControl>
@@ -264,6 +311,10 @@ export const AddForm: React.FC<Props> = ({
                 setCommentText={setCommentText}
               />
             </Box>
+            {(errorMessage === ErrorMessage.NotValidTag ||
+              errorMessage === ErrorMessage.CloseTag) && (
+              <Typography style={{ color: "red" }}>{errorMessage}</Typography>
+            )}
             <Box style={{ display: "flex", flexDirection: "column" }}>
               <FormControl>
                 <InputLabel htmlFor="captcha" required>
@@ -303,6 +354,7 @@ export const AddForm: React.FC<Props> = ({
                 variant="outlined"
                 type="submit"
                 style={{ width: "88px" }}
+                disabled={isError}
               >
                 {isLoad ? <CircularProgress size={"1.5rem"} /> : buttonText}
               </Button>
