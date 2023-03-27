@@ -36,9 +36,10 @@ export const useStyles = makeStyles((theme) => ({
 type Props = {
   commentText: string;
   setCommentText: (arg: string) => void;
+  setErrorMessage: (str: string) => void;
 };
 
-export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
+export const TextInput: React.FC<Props> = ({ commentText, setCommentText, setErrorMessage }) => {
   const classes = useStyles();
   const [isViewLinkInput, setIsViewLinkInput] = useState(false);
   const [link, setLink] = useState("");
@@ -46,6 +47,7 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, setState: (arg: string) => void) => {
       setState(event.target.value);
+      setErrorMessage("");
     },
     []
   );
@@ -115,7 +117,7 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
               onChange={event => handleInputChange(event, setLink)}
             />
             <Tooltip title="Insert a link" style={{position: "absolute", right: 0}}>
-              <IconButton size="small" onClick={handleAddedLink}>
+              <IconButton size="small" onClick={handleAddedLink} style={{border: "1px solid transparent"}}>
                 <CheckIcon />
               </IconButton>
             </Tooltip>

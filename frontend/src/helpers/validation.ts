@@ -1,11 +1,12 @@
 export const isCorrectUserName = (userName: string) => {
-  if (!userName.trim().length) {
+  if (userName.trim().length === 0) {
     return false;
   }
+
   const validChars = "1234567890_qwertyuiopasdfghjklzxcvbnm";
 
   for (const char of userName) {
-    if (!validChars.includes(char)) {
+    if (!validChars.includes(char.toLowerCase())) {
       return false;
     }
   }
@@ -14,7 +15,15 @@ export const isCorrectUserName = (userName: string) => {
 };
 
 export const isValidTag = (text: string) => {
-  if (!text.includes(">") && !text.includes("<")) {
+  if (text.trim().length === 0) {
+    return true;
+  }
+
+  if (
+    (!text.includes(">") && !text.includes("<")) ||
+    (text.includes(">") && !text.includes("<")) ||
+    (!text.includes(">") && text.includes("<"))
+  ) {
     return true;
   }
 
@@ -28,19 +37,20 @@ export const isValidTag = (text: string) => {
 
 export const hasAllTagsClosed = (text: string) => {
   if (text.trim().length === 0) {
-    return false;
+    return true;
   }
 
-  if (!text.includes(">") && !text.includes("<")) {
+  if (
+    (!text.includes(">") && !text.includes("<")) ||
+    (text.includes(">") && !text.includes("<")) ||
+    (!text.includes(">") && text.includes("<"))
+  ) {
     return true;
   }
 
   const openingTagRegex = /<[^/][^>]*>/g;
-
   const closingTagRegex = /<\/[^>]*>/g;
-
   const openingTags = text.match(openingTagRegex);
-
   const closingTags = text.match(closingTagRegex);
 
   return (

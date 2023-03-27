@@ -148,24 +148,24 @@ export const AddForm: React.FC<Props> = ({
       !hasAllTagsClosed(commentText)
     ) {
       setIsError(true);
-      return;
     }
 
     if (!isCorrectUserName(userName) && userName.trim().length > 0) {
       setErrorMessage(ErrorMessage.UserName);
-      return;
     }
 
     if (!isValidTag(commentText)) {
       setErrorMessage(ErrorMessage.NotValidTag);
-      return;
+    }
+
+    if (!hasAllTagsClosed(commentText)) {
+      setErrorMessage(ErrorMessage.CloseTag);
     }
 
     if (
       isCorrectUserName(userName) &&
       isValidTag(commentText) &&
-      hasAllTagsClosed(commentText) &&
-      captchaText.trim().length > 0
+      hasAllTagsClosed(commentText)
     ) {
       setIsError(false);
       setErrorMessage("");
@@ -310,6 +310,7 @@ export const AddForm: React.FC<Props> = ({
               <TextInput
                 commentText={commentText}
                 setCommentText={setCommentText}
+                setErrorMessage={setErrorMessage}
               />
             </Box>
             {(errorMessage === ErrorMessage.NotValidTag ||
