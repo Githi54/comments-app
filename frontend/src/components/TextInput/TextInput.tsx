@@ -93,6 +93,7 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText }) => {
       }
 
       setCommentText(`<a href=${link}>${commentText}</a>`);
+      setIsViewLinkInput(false);
   }, [commentText, link]);
 
   const handleLinkView = useCallback(() => {

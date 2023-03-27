@@ -164,7 +164,8 @@ export const AddForm: React.FC<Props> = ({
     if (
       isCorrectUserName(userName) &&
       isValidTag(commentText) &&
-      hasAllTagsClosed(commentText)
+      hasAllTagsClosed(commentText) &&
+      captchaText.trim().length > 0
     ) {
       setIsError(false);
       setErrorMessage("");
