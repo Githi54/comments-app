@@ -139,6 +139,8 @@ export const AddForm: React.FC<Props> = ({
     setHomePage("");
     setCapthcaText("");
     setIsVisible(false);
+    setIsError(false);
+    setErrorMessage("");
   };
 
   useEffect(() => {

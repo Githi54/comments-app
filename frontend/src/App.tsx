@@ -97,7 +97,7 @@ function App() {
     <Box sx={{ display: "flex", alignItems: "center", margin: "0 auto" }}>
       <AddForm openForm={openForm} setOpenForm={setOpenForm} isAnswer={false} />
       <div ref={topRef}></div>
-      {Array.isArray(visibleComments) ? (
+      {Array.isArray(comments) ? (
         <Box style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           <Box
             style={{

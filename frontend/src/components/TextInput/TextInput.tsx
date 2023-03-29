@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { Box, IconButton, Input, Paper, Tooltip } from "@material-ui/core";
 import {
   Link as LinkIcon,
@@ -15,6 +15,7 @@ export const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     height: "100px",
     border: "1px solid gray",
+    justifyContent: "space-between",
   },
   input: {
     flexGrow: 1,
@@ -39,13 +40,31 @@ type Props = {
   setErrorMessage: (str: string) => void;
 };
 
-export const TextInput: React.FC<Props> = ({ commentText, setCommentText, setErrorMessage }) => {
+export const TextInput: React.FC<Props> = ({
+  commentText,
+  setCommentText,
+  setErrorMessage,
+}) => {
   const classes = useStyles();
   const [isViewLinkInput, setIsViewLinkInput] = useState(false);
   const [link, setLink] = useState("");
+  const [text, setText] = useState("");
+
+  useEffect(() => {
+    if (commentText.trim().length > 0) {
+      setText(commentText);
+    }
+
+    if (commentText.length === 0) {
+      setText("Type comment");
+    }
+  }, [commentText, text]);
 
   const handleInputChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>, setState: (arg: string) => void) => {
+    (
+      event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+      setState: (arg: string) => void
+    ) => {
       setState(event.target.value);
       setErrorMessage("");
     },
@@ -83,41 +102,57 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText, setErr
   const handleAddedLink = useCallback(() => {
     const selectedText = window.getSelection();
 
-      if (`${selectedText}`.length > 0) {
-        setCommentText(
-          commentText.replace(
-            `${selectedText}`,
-            `<a href=${link}>${selectedText}</a>`
-          )
-        );
+    if (!link.trim().length) {
+      return;
+    }
 
-        return;
-      }
+    if (`${selectedText}`.length > 0) {
+      setCommentText(
+        commentText.replace(
+          `${selectedText}`,
+          `<a href=${link}>${selectedText}</a>`
+        )
+      );
 
-      setCommentText(`<a href=${link}>${commentText}</a>`);
-      setIsViewLinkInput(false);
+      return;
+    }
+
+    setCommentText(`<a href=${link}>${commentText}</a>`);
+    setIsViewLinkInput(false);
   }, [commentText, link]);
 
   const handleLinkView = useCallback(() => {
     setIsViewLinkInput(!isViewLinkInput);
-  }, [isViewLinkInput])
+  }, [isViewLinkInput]);
 
   return (
     <Box style={{ position: "relative" }}>
       {isViewLinkInput && (
-        <Box style={{ position: "absolute", bottom: 15, left: 5 }}>
-          <Box style={{display: "flex", position: "relative", border: "2px solid lightblue"}}>
+        <Box style={{ position: "absolute", bottom: 15, left: 5, zIndex: 3 }}>
+          <Box
+            style={{
+              display: "flex",
+              position: "relative",
+              border: "2px solid lightblue",
+            }}
+          >
             <Input
               style={{
                 display: "block",
                 maxWidth: "200px",
                 backgroundColor: "white",
               }}
-              type="url"
-              onChange={event => handleInputChange(event, setLink)}
+              onChange={(event) => handleInputChange(event, setLink)}
             />
-            <Tooltip title="Insert a link" style={{position: "absolute", right: 0}}>
-              <IconButton size="small" onClick={handleAddedLink} style={{border: "1px solid transparent"}}>
+            <Tooltip
+              title="Insert a link"
+              style={{ position: "absolute", right: 0 }}
+            >
+              <IconButton
+                size="small"
+                onClick={handleAddedLink}
+                style={{ border: "1px solid transparent" }}
+              >
                 <CheckIcon />
               </IconButton>
             </Tooltip>
@@ -125,34 +160,38 @@ export const TextInput: React.FC<Props> = ({ commentText, setCommentText, setErr
         </Box>
       )}
       <Paper component="div" className={classes.root}>
-        <textarea
-          className={classes.input}
-          placeholder="Type comment"
-          value={commentText}
-          onChange={event => handleInputChange(event, setCommentText)}
-          required
-        />
-        <Tooltip title="Insert a link">
-          <IconButton className={classes.iconButton} onClick={handleLinkView}>
-            <LinkIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Bold text">
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => handleClickText("b")}
-          >
-            <BoldIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Italicize text">
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => handleClickText("i")}
-          >
-            <ItalicIcon />
-          </IconButton>
-        </Tooltip>
+        <Box style={{ position: "relative" }}>
+          <textarea
+            className={classes.input}
+            placeholder="Type comment"
+            value={commentText}
+            onChange={(event) => handleInputChange(event, setCommentText)}
+            required
+          />
+        </Box>
+        <Box>
+          <Tooltip title="Insert a link">
+            <IconButton className={classes.iconButton} onClick={handleLinkView}>
+              <LinkIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Bold text">
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => handleClickText("strong")}
+            >
+              <BoldIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Italicize text">
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => handleClickText("i")}
+            >
+              <ItalicIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Paper>
     </Box>
   );
